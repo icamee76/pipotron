@@ -800,42 +800,75 @@
     }
 
     // Fonction pour générer une phrase aléatoire (à modifier)
-    function generateSentence() {
-        // Déterminer quels sujets utiliser selon le mode
-        let subjectsToUse = [...words.subjects];
-        
-        // En mode personnalisé, inclure les membres
-        if (isPersonalMode && words.members.length > 0) {
-            subjectsToUse = [...words.subjects, ...words.members];
-        }
-        
-        // Si aucun sujet n'est disponible, utiliser un sujet par défaut
-        if (subjectsToUse.length === 0) {
-            subjectsToUse = ["L'équipe"];
-        }
-        
-        const subject = subjectsToUse[Math.floor(Math.random() * subjectsToUse.length)];
-        
-        // Si aucun verbe n'est disponible, utiliser un verbe par défaut
-        const verbInfinitive = words.verbs.length > 0 
-            ? words.verbs[Math.floor(Math.random() * words.verbs.length)] 
-            : "développer";
-        
-        // Conjuguer le verbe
-        const verb = conjugateVerb(verbInfinitive);
-        
-        // Si aucun adjectif n'est disponible, utiliser un adjectif par défaut
-        const adjective = words.adjectives.length > 0 
-            ? words.adjectives[Math.floor(Math.random() * words.adjectives.length)] 
-            : "innovante";
-        
-        // Si aucun complément n'est disponible, utiliser un complément par défaut
-        const complement = words.complements.length > 0 
-            ? words.complements[Math.floor(Math.random() * words.complements.length)] 
-            : "des synergies importantes";
-        
-        return `${subject} ${verb} de manière ${adjective} ${complement}.`;
+// Fonction pour générer une phrase aléatoire
+function generateSentence() {
+    // Déterminer quels sujets utiliser selon le mode
+    let subjectsToUse = [...words.subjects];
+    
+    // En mode personnalisé, inclure les membres
+    if (isPersonalMode && words.members.length > 0) {
+        subjectsToUse = [...words.subjects, ...words.members];
     }
+    
+    // Si aucun sujet n'est disponible, utiliser un sujet par défaut
+    if (subjectsToUse.length === 0) {
+        subjectsToUse = ["L'équipe"];
+    }
+    
+    const subject = subjectsToUse[Math.floor(Math.random() * subjectsToUse.length)];
+    
+    // Si aucun verbe n'est disponible, utiliser un verbe par défaut
+    const verbInfinitive = words.verbs.length > 0 
+        ? words.verbs[Math.floor(Math.random() * words.verbs.length)] 
+        : "développer";
+    
+    // Conjuguer le verbe
+    const verb = conjugateVerb(verbInfinitive);
+    
+    // Si aucun adjectif n'est disponible, utiliser un adjectif par défaut
+    const adjective = words.adjectives.length > 0 
+        ? words.adjectives[Math.floor(Math.random() * words.adjectives.length)] 
+        : "innovante";
+    
+    // Si aucun complément n'est disponible, utiliser un complément par défaut
+    const complement = words.complements.length > 0 
+        ? words.complements[Math.floor(Math.random() * words.complements.length)] 
+        : "des synergies importantes";
+    
+    // Variantes de connecteurs pour la liaison verbe-adjectif
+    const connectors = [
+        "de manière", 
+        "de façon", 
+        "avec une approche", 
+        "dans une démarche", 
+        "selon une méthode", 
+        "via un processus", 
+        "par une stratégie", 
+        "en mode", 
+        "en utilisant une vision", 
+        "en appliquant des principes"
+    ];
+    
+    // Sélectionner aléatoirement un connecteur
+    const connector = connectors[Math.floor(Math.random() * connectors.length)];
+    
+    // Dans certains cas, adapter la forme de l'adjectif au connecteur
+    let adjustedAdjective = adjective;
+    
+    // Ajuster l'adjectif pour certains connecteurs nécessitant une forme spécifique
+    if (connector === "en mode" || connector === "en utilisant une vision" || 
+        connector === "en appliquant des principes" || connector === "via un processus" || 
+        connector === "par une stratégie") {
+        // Si l'adjectif se termine par "e", on peut le garder tel quel
+        // Sinon, on ajoute potentiellement un "e" pour certains connecteurs
+        if (!adjustedAdjective.endsWith("e") && 
+            (connector === "via un processus" || connector === "par une stratégie")) {
+            adjustedAdjective += "e";
+        }
+    }
+    
+    return `${subject} ${verb} ${connector} ${adjustedAdjective} ${complement}.`;
+}
 
         // Fonction pour afficher les mots dans chaque catégorie (dans les onglets et le panel admin)
         function renderWords() {
