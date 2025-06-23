@@ -746,40 +746,96 @@
             modeLabel.textContent = isPersonalMode ? 'Mode personnalisé' : 'Mode anonyme';
         }
 
-        // Fonction pour générer une phrase aléatoire
-        function generateSentence() {
-            // Déterminer quels sujets utiliser selon le mode
-            let subjectsToUse = [...words.subjects];
-            
-            // En mode personnalisé, inclure les membres
-            if (isPersonalMode && words.members.length > 0) {
-                subjectsToUse = [...words.subjects, ...words.members];
-            }
-            
-            // Si aucun sujet n'est disponible, utiliser un sujet par défaut
-            if (subjectsToUse.length === 0) {
-                subjectsToUse = ["L'équipe"];
-            }
-            
-            const subject = subjectsToUse[Math.floor(Math.random() * subjectsToUse.length)];
-            
-            // Si aucun verbe n'est disponible, utiliser un verbe par défaut
-            const verb = words.verbs.length > 0 
-                ? words.verbs[Math.floor(Math.random() * words.verbs.length)] 
-                : "développe";
-            
-            // Si aucun adjectif n'est disponible, utiliser un adjectif par défaut
-            const adjective = words.adjectives.length > 0 
-                ? words.adjectives[Math.floor(Math.random() * words.adjectives.length)] 
-                : "innovante";
-            
-            // Si aucun complément n'est disponible, utiliser un complément par défaut
-            const complement = words.complements.length > 0 
-                ? words.complements[Math.floor(Math.random() * words.complements.length)] 
-                : "des synergies importantes";
-            
-            return `${subject} ${verb} de manière ${adjective} ${complement}.`;
+// Fonction pour conjuguer un verbe à la 3e personne du singulier
+    function conjugateVerb(verb) {
+        // Verbes déjà conjugués (qui ne se terminent pas par -er, -ir, -re)
+        if (!verb.endsWith('er') && !verb.endsWith('ir') && !verb.endsWith('re')) {
+            return verb;
         }
+        
+        // Verbes spéciaux/irréguliers
+        const specialVerbs = {
+            'aller': 'va',
+            'avoir': 'a',
+            'être': 'est',
+            'faire': 'fait',
+            'dire': 'dit',
+            'pouvoir': 'peut',
+            'savoir': 'sait',
+            'voir': 'voit',
+            'vouloir': 'veut',
+            'devoir': 'doit',
+            'prendre': 'prend',
+            'mettre': 'met',
+            'tenir': 'tient',
+            'venir': 'vient'
+        };
+        
+        if (specialVerbs[verb]) {
+            return specialVerbs[verb];
+        }
+        
+        // Verbes en -er (1er groupe)
+        if (verb.endsWith('er')) {
+            // Pour "capitaliser sur" et cas similaires
+            if (verb.includes(' ')) {
+                const parts = verb.split(' ');
+                return conjugateVerb(parts[0]) + ' ' + parts.slice(1).join(' ');
+            }
+            return verb.slice(0, -2) + 'e';
+        }
+        
+        // Verbes en -ir (2e groupe, comme finir -> finit)
+        if (verb.endsWith('ir')) {
+            return verb.slice(0, -2) + 'it';
+        }
+        
+        // Verbes en -re (3e groupe, comme vendre -> vend)
+        if (verb.endsWith('re')) {
+            return verb.slice(0, -2);
+        }
+        
+        // Par défaut, retourner le verbe inchangé
+        return verb;
+    }
+
+    // Fonction pour générer une phrase aléatoire (à modifier)
+    function generateSentence() {
+        // Déterminer quels sujets utiliser selon le mode
+        let subjectsToUse = [...words.subjects];
+        
+        // En mode personnalisé, inclure les membres
+        if (isPersonalMode && words.members.length > 0) {
+            subjectsToUse = [...words.subjects, ...words.members];
+        }
+        
+        // Si aucun sujet n'est disponible, utiliser un sujet par défaut
+        if (subjectsToUse.length === 0) {
+            subjectsToUse = ["L'équipe"];
+        }
+        
+        const subject = subjectsToUse[Math.floor(Math.random() * subjectsToUse.length)];
+        
+        // Si aucun verbe n'est disponible, utiliser un verbe par défaut
+        const verbInfinitive = words.verbs.length > 0 
+            ? words.verbs[Math.floor(Math.random() * words.verbs.length)] 
+            : "développer";
+        
+        // Conjuguer le verbe
+        const verb = conjugateVerb(verbInfinitive);
+        
+        // Si aucun adjectif n'est disponible, utiliser un adjectif par défaut
+        const adjective = words.adjectives.length > 0 
+            ? words.adjectives[Math.floor(Math.random() * words.adjectives.length)] 
+            : "innovante";
+        
+        // Si aucun complément n'est disponible, utiliser un complément par défaut
+        const complement = words.complements.length > 0 
+            ? words.complements[Math.floor(Math.random() * words.complements.length)] 
+            : "des synergies importantes";
+        
+        return `${subject} ${verb} de manière ${adjective} ${complement}.`;
+    }
 
         // Fonction pour afficher les mots dans chaque catégorie (dans les onglets et le panel admin)
         function renderWords() {
