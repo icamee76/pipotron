@@ -1,0 +1,1236 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pipotron Entreprise Pro</title>
+    <style>
+        * {
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        body {
+            margin: 0;
+            padding: 20px;
+            background-color: #f5f7fa;
+            color: #333;
+            min-height: 100vh;
+        }
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            background-color: white;
+            border-radius: 10px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+            padding: 20px;
+        }
+        h1 {
+            color: #2c3e50;
+            text-align: center;
+            margin-bottom: 30px;
+            font-size: 2rem;
+        }
+        .output-container {
+            background-color: #eef2f7;
+            padding: 30px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            min-height: 120px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            font-size: 1.2rem;
+            line-height: 1.6;
+            color: #34495e;
+            border-left: 4px solid #3498db;
+        }
+        .button-container {
+            display: flex;
+            justify-content: center;
+            margin-bottom: 30px;
+            gap: 15px;
+            flex-wrap: wrap;
+        }
+        button {
+            background-color: #3498db;
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 1rem;
+            font-weight: 600;
+            transition: all 0.2s ease;
+        }
+        button:hover {
+            background-color: #2980b9;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+        .secondary-button {
+            background-color: #95a5a6;
+        }
+        .secondary-button:hover {
+            background-color: #7f8c8d;
+        }
+        .success-button {
+            background-color: #2ecc71;
+        }
+        .success-button:hover {
+            background-color: #27ae60;
+        }
+        .tabs {
+            display: flex;
+            border-bottom: 1px solid #ddd;
+            margin-bottom: 20px;
+            flex-wrap: wrap;
+        }
+        .tab {
+            padding: 10px 20px;
+            cursor: pointer;
+            border-bottom: 3px solid transparent;
+        }
+        .tab.active {
+            border-bottom: 3px solid #3498db;
+            font-weight: bold;
+        }
+        .tab-content {
+            display: none;
+        }
+        .tab-content.active {
+            display: block;
+        }
+        .category {
+            margin-bottom: 25px;
+        }
+        .category-title {
+            font-weight: bold;
+            margin-bottom: 10px;
+            color: #2c3e50;
+            display: flex;
+            align-items: center;
+        }
+        .words-container {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin-bottom: 15px;
+        }
+        .word-tag {
+            background-color: #e9f0f7;
+            padding: 8px 14px;
+            border-radius: 50px;
+            display: flex;
+            align-items: center;
+            font-size: 0.9rem;
+        }
+        .word-tag.member {
+            background-color: #e8f5e9;
+            border-left: 3px solid #4caf50;
+        }
+        .word-tag .delete {
+            margin-left: 8px;
+            color: #e74c3c;
+            cursor: pointer;
+            font-weight: bold;
+        }
+        .add-word-form {
+            display: flex;
+            margin-top: 10px;
+        }
+        .add-word-form input {
+            flex: 1;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 4px 0 0 4px;
+            font-size: 0.9rem;
+        }
+        .add-word-form button {
+            border-radius: 0 4px 4px 0;
+            padding: 10px 15px;
+        }
+        footer {
+            text-align: center;
+            margin-top: 30px;
+            color: #7f8c8d;
+            font-size: 0.9rem;
+        }
+        .toggle-container {
+            display: flex;
+            align-items: center;
+            margin-bottom: 20px;
+            justify-content: center;
+            gap: 15px;
+        }
+        .toggle-label {
+            font-size: 0.95rem;
+            font-weight: 500;
+        }
+        .switch {
+            position: relative;
+            display: inline-block;
+            width: 50px;
+            height: 26px;
+        }
+        .switch input {
+            opacity: 0;
+            width: 0;
+            height: 0;
+        }
+        .slider {
+            position: absolute;
+            cursor: pointer;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: #ccc;
+            transition: .4s;
+            border-radius: 34px;
+        }
+        .slider:before {
+            position: absolute;
+            content: "";
+            height: 18px;
+            width: 18px;
+            left: 4px;
+            bottom: 4px;
+            background-color: white;
+            transition: .4s;
+            border-radius: 50%;
+        }
+        input:checked + .slider {
+            background-color: #4caf50;
+        }
+        input:checked + .slider:before {
+            transform: translateX(24px);
+        }
+        .mode-label {
+            font-weight: bold;
+            color: #4caf50;
+        }
+        .info-box {
+            background-color: #f8f9fa;
+            padding: 12px;
+            border-radius: 6px;
+            border-left: 4px solid #3498db;
+            margin-bottom: 20px;
+        }
+        .badge {
+            background-color: #4caf50;
+            color: white;
+            font-size: 0.7rem;
+            padding: 3px 8px;
+            border-radius: 12px;
+            margin-left: 8px;
+        }
+        .import-export {
+            margin-bottom: 25px;
+            padding: 15px;
+            background-color: #f9f9f9;
+            border-radius: 8px;
+            border: 1px dashed #ccc;
+        }
+        .import-export h3 {
+            margin-top: 0;
+            margin-bottom: 15px;
+            font-size: 1.1rem;
+            color: #2c3e50;
+        }
+        .import-export-buttons {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+        #csv-file-input {
+            display: none;
+        }
+        .upload-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+        }
+        textarea {
+            width: 100%;
+            height: 150px;
+            padding: 12px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            font-family: monospace;
+            margin-bottom: 15px;
+            resize: vertical;
+        }
+        .hidden {
+            display: none;
+        }
+        .loading-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(255, 255, 255, 0.9);
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+        }
+        .loading-spinner {
+            border: 5px solid #f3f3f3;
+            border-top: 5px solid #3498db;
+            border-radius: 50%;
+            width: 50px;
+            height: 50px;
+            animation: spin 1s linear infinite;
+            margin-bottom: 20px;
+        }
+        .loading-text {
+            font-size: 1.2rem;
+            color: #333;
+        }
+        .typing-effect {
+            overflow: hidden;
+            border-right: .15em solid #3498db;
+            white-space: nowrap;
+            animation: typing 1.5s steps(40, end), blink-caret .75s step-end infinite;
+        }
+        @keyframes typing {
+            from { width: 0 }
+            to { width: 100% }
+        }
+        @keyframes blink-caret {
+            from, to { border-color: transparent }
+            50% { border-color: #3498db; }
+        }
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        .menu-icon {
+            display: none;
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background-color: #3498db;
+            color: white;
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            z-index: 100;
+            justify-content: center;
+            align-items: center;
+            cursor: pointer;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+        .menu-icon span {
+            display: block;
+            width: 25px;
+            height: 3px;
+            background-color: white;
+            margin: 5px 0;
+            border-radius: 3px;
+        }
+        .admin-panel {
+            position: fixed;
+            top: 0;
+            right: -300px;
+            width: 300px;
+            height: 100%;
+            background-color: white;
+            box-shadow: -2px 0 10px rgba(0, 0, 0, 0.1);
+            transition: right 0.3s ease;
+            z-index: 90;
+            padding: 20px;
+            overflow-y: auto;
+        }
+        .admin-panel.open {
+            right: 0;
+        }
+        .close-admin {
+            position: absolute;
+            top: 15px;
+            right: 15px;
+            font-size: 1.5rem;
+            background: none;
+            border: none;
+            cursor: pointer;
+            color: #e74c3c;
+            padding: 0;
+        }
+        .admin-header {
+            margin-top: 40px;
+            margin-bottom: 20px;
+            text-align: center;
+            font-size: 1.3rem;
+            color: #2c3e50;
+        }
+        .notification {
+            position: fixed;
+            bottom: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            background-color: #2ecc71;
+            color: white;
+            padding: 15px 25px;
+            border-radius: 50px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+            opacity: 0;
+            transition: opacity 0.3s ease;
+            z-index: 1000;
+        }
+        .notification.show {
+            opacity: 1;
+        }
+        @media (max-width: 768px) {
+            .container {
+                padding: 15px;
+            }
+            .output-container {
+                padding: 20px;
+                font-size: 1rem;
+            }
+            button {
+                padding: 10px 20px;
+            }
+            .toggle-container {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+            .menu-icon {
+                display: flex;
+                flex-direction: column;
+            }
+            .tabs {
+                display: none;
+            }
+            .tab-content {
+                display: none !important;
+            }
+            .tab-content.show-mobile {
+                display: block !important;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="menu-icon" id="menu-icon">
+        <span></span>
+        <span></span>
+        <span></span>
+    </div>
+    
+    <div class="admin-panel" id="admin-panel">
+        <button class="close-admin" id="close-admin">&times;</button>
+        <div class="admin-header">Back Office</div>
+        
+        <div class="admin-content">
+            <div class="admin-tab" data-content="editor">
+                <div class="category">
+                    <div class="category-title">Sujets génériques</div>
+                    <div class="words-container" id="subjects-container"></div>
+                    <div class="add-word-form">
+                        <input type="text" id="new-subject" placeholder="Ajouter un sujet...">
+                        <button id="add-subject-btn">Ajouter</button>
+                    </div>
+                </div>
+                
+                <div class="category">
+                    <div class="category-title">Verbes</div>
+                    <div class="words-container" id="verbs-container"></div>
+                    <div class="add-word-form">
+                        <input type="text" id="new-verb" placeholder="Ajouter un verbe...">
+                        <button id="add-verb-btn">Ajouter</button>
+                    </div>
+                </div>
+                
+                <div class="category">
+                    <div class="category-title">Adjectifs</div>
+                    <div class="words-container" id="adjectives-container"></div>
+                    <div class="add-word-form">
+                        <input type="text" id="new-adjective" placeholder="Ajouter un adjectif...">
+                        <button id="add-adjective-btn">Ajouter</button>
+                    </div>
+                </div>
+                
+                <div class="category">
+                    <div class="category-title">Compléments</div>
+                    <div class="words-container" id="complements-container"></div>
+                    <div class="add-word-form">
+                        <input type="text" id="new-complement" placeholder="Ajouter un complément...">
+                        <button id="add-complement-btn">Ajouter</button>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="admin-tab" data-content="members">
+                <div class="info-box">
+                    <p>Ajoutez ici les noms des membres de votre équipe. Ces noms seront utilisés comme sujets potentiels des phrases en mode personnalisé uniquement.</p>
+                </div>
+                
+                <div class="category">
+                    <div class="category-title">Membres de l'équipe <span class="badge" id="members-count">0</span></div>
+                    <div class="words-container" id="members-container"></div>
+                    <div class="add-word-form">
+                        <input type="text" id="new-member" placeholder="Ajouter un membre...">
+                        <button id="add-member-btn">Ajouter</button>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="admin-tab" data-content="import-export">
+                <div class="import-export">
+                    <h3>Exporter vos listes de mots</h3>
+                    <button id="export-csv-btn" class="secondary-button">Exporter au format CSV</button>
+                    <div id="csv-preview-container" class="hidden" style="margin-top: 15px;">
+                        <p>Aperçu du CSV :</p>
+                        <textarea id="csv-preview" readonly></textarea>
+                        <button id="copy-csv-btn" class="success-button">Copier le CSV</button>
+                    </div>
+                </div>
+                
+                <div class="import-export">
+                    <h3>Importer des listes de mots</h3>
+                    <p>Format attendu : CSV avec en-têtes (Sujets,Membres,Verbes,Adjectifs,Compléments)</p>
+                    <div class="import-export-buttons">
+                        <input type="file" id="csv-file-input" accept=".csv,text/csv">
+                        <button id="upload-csv-btn" class="secondary-button upload-btn">
+                            Sélectionner un fichier CSV
+                        </button>
+                        <button id="import-csv-btn" class="success-button" disabled>Importer</button>
+                    </div>
+                    <div id="import-preview-container" class="hidden" style="margin-top: 15px;">
+                        <p>Aperçu du contenu à importer :</p>
+                        <textarea id="import-preview"></textarea>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="container">
+        <h1>Pipotron Entreprise Pro</h1>
+        
+        <div class="toggle-container">
+            <span class="toggle-label">Mode anonyme</span>
+            <label class="switch">
+                <input type="checkbox" id="mode-toggle">
+                <span class="slider"></span>
+            </label>
+            <span class="toggle-label">Mode personnalisé</span>
+            <span class="mode-label" id="current-mode">Mode anonyme</span>
+        </div>
+        
+        <div class="output-container" id="output">
+            Cliquez sur le bouton pour générer une phrase corporate !
+        </div>
+        
+        <div class="button-container">
+            <button id="generate-btn">Générer une phrase</button>
+        </div>
+        
+        <div class="tabs">
+            <div class="tab active" data-tab="generator">Générateur</div>
+            <div class="tab" data-tab="editor">Éditer les mots</div>
+            <div class="tab" data-tab="members">Membres de l'équipe</div>
+            <div class="tab" data-tab="import-export">Import/Export</div>
+        </div>
+        
+        <div id="generator" class="tab-content active">
+            <div class="info-box">
+                <p><strong>Mode anonyme</strong> : Génère des phrases avec des sujets génériques uniquement.</p>
+                <p><strong>Mode personnalisé</strong> : Inclut les noms des membres de l'équipe comme sujets potentiels des phrases.</p>
+            </div>
+            <p>Utilisez le bouton ci-dessus pour générer des phrases pleines de jargon d'entreprise. Accédez au back-office via l'icône de menu pour personnaliser le vocabulaire utilisé.</p>
+        </div>
+        
+        <div id="editor" class="tab-content">
+            <div class="category">
+                <div class="category-title">Sujets génériques</div>
+                <div class="words-container" id="subjects-container-tab"></div>
+                <div class="add-word-form">
+                    <input type="text" id="new-subject-tab" placeholder="Ajouter un sujet...">
+                    <button id="add-subject-btn-tab">Ajouter</button>
+                </div>
+            </div>
+            
+            <div class="category">
+                <div class="category-title">Verbes</div>
+                <div class="words-container" id="verbs-container-tab"></div>
+                <div class="add-word-form">
+                    <input type="text" id="new-verb-tab" placeholder="Ajouter un verbe...">
+                    <button id="add-verb-btn-tab">Ajouter</button>
+                </div>
+            </div>
+            
+            <div class="category">
+                <div class="category-title">Adjectifs</div>
+                <div class="words-container" id="adjectives-container-tab"></div>
+                <div class="add-word-form">
+                    <input type="text" id="new-adjective-tab" placeholder="Ajouter un adjectif...">
+                    <button id="add-adjective-btn-tab">Ajouter</button>
+                </div>
+            </div>
+            
+            <div class="category">
+                <div class="category-title">Compléments</div>
+                <div class="words-container" id="complements-container-tab"></div>
+                <div class="add-word-form">
+                    <input type="text" id="new-complement-tab" placeholder="Ajouter un complément...">
+                    <button id="add-complement-btn-tab">Ajouter</button>
+                </div>
+            </div>
+        </div>
+        
+        <div id="members" class="tab-content">
+            <div class="info-box">
+                <p>Ajoutez ici les noms des membres de votre équipe. Ces noms seront utilisés comme sujets potentiels des phrases en mode personnalisé uniquement.</p>
+                <p>Exemple : "Marie", "Jean", "L'équipe de Thomas", etc.</p>
+            </div>
+            
+            <div class="category">
+                <div class="category-title">Membres de l'équipe <span class="badge" id="members-count-tab">0</span></div>
+                <div class="words-container" id="members-container-tab"></div>
+                <div class="add-word-form">
+                    <input type="text" id="new-member-tab" placeholder="Ajouter un membre...">
+                    <button id="add-member-btn-tab">Ajouter</button>
+                </div>
+            </div>
+        </div>
+        
+        <div id="import-export" class="tab-content">
+            <div class="info-box">
+                <p>Vous pouvez exporter vos listes de mots au format CSV pour les modifier dans un tableur, puis les réimporter.</p>
+                <p>Chaque catégorie sera exportée dans une colonne séparée.</p>
+            </div>
+            
+            <div class="import-export">
+                <h3>Exporter vos listes de mots</h3>
+                <button id="export-csv-btn-tab" class="secondary-button">Exporter au format CSV</button>
+                <div id="csv-preview-container-tab" class="hidden" style="margin-top: 15px;">
+                    <p>Aperçu du CSV :</p>
+                    <textarea id="csv-preview-tab" readonly></textarea>
+                    <button id="copy-csv-btn-tab" class="success-button">Copier le CSV</button>
+                </div>
+            </div>
+            
+            <div class="import-export">
+                <h3>Importer des listes de mots</h3>
+                <p>Format attendu : CSV avec en-têtes (Sujets,Membres,Verbes,Adjectifs,Compléments)</p>
+                <div class="import-export-buttons">
+                    <input type="file" id="csv-file-input-tab" accept=".csv,text/csv">
+                    <button id="upload-csv-btn-tab" class="secondary-button upload-btn">
+                        Sélectionner un fichier CSV
+                    </button>
+                    <button id="import-csv-btn-tab" class="success-button" disabled>Importer</button>
+                </div>
+                <div id="import-preview-container-tab" class="hidden" style="margin-top: 15px;">
+                    <p>Aperçu du contenu à importer :</p>
+                    <textarea id="import-preview-tab"></textarea>
+                </div>
+            </div>
+        </div>
+        
+        <footer>
+            Pipotron Entreprise Pro © 2025 - Générateur de phrases corporate
+        </footer>
+    </div>
+
+    <div id="notification" class="notification">Notification</div>
+
+    <script>
+        // Données initiales
+        let words = {
+            subjects: [
+                "Notre entreprise", 
+                "Notre équipe", 
+                "Notre stratégie", 
+                "Notre vision", 
+                "La pluridisciplinarité",
+                "L'approche holistique",
+                "La synergie"
+            ],
+            members: [
+                // Sera rempli par l'utilisateur
+            ],
+            verbs: [
+                "déploie", 
+                "implémente", 
+                "optimise", 
+                "développe", 
+                "valorise",
+                "catalyse",
+                "disrupte"
+            ],
+            adjectives: [
+                "disruptive", 
+                "agile", 
+                "itérative", 
+                "innovante", 
+                "synergique",
+                "pluridisciplinaire",
+                "cross-fonctionnelle"
+            ],
+            complements: [
+                "des enjeux d'entreprise", 
+                "une chaîne de valeur", 
+                "une intermédiation efficace", 
+                "un draft stratégique", 
+                "une appétence au changement",
+                "un mindset growth",
+                "un pipeline de valeur ajoutée"
+            ]
+        };
+
+        // État de l'application
+        let isPersonalMode = false;
+        let csvFileData = null;
+        let isFirstVisit = false;
+        let isTyping = false;
+        let typingTimeout = null;
+
+        // Vérifier si c'est la première visite et charger les données prédéfinies si nécessaire
+        async function checkFirstVisit() {
+            const hasVisited = localStorage.getItem('pipotronVisited');
+            
+            if (!hasVisited) {
+                isFirstVisit = true;
+                
+                try {
+                    // Tenter de charger le CSV prédéfini
+                    const response = await fetch('pipotron_words.csv');
+                    if (response.ok) {
+                        const csvData = await response.text();
+                        importFromCSV(csvData);
+                        showNotification("Mots prédéfinis chargés avec succès !");
+                    }
+                } catch (error) {
+                    console.log("Aucun fichier CSV prédéfini n'a été trouvé.");
+                }
+                
+                // Marquer que l'utilisateur a visité le site
+                localStorage.setItem('pipotronVisited', 'true');
+            }
+        }
+
+        // Charger les données depuis le stockage local si disponible
+        function loadFromLocalStorage() {
+            const savedWords = localStorage.getItem('pipotronWords');
+            if (savedWords) {
+                words = JSON.parse(savedWords);
+                // S'assurer que la catégorie membres existe
+                if (!words.members) {
+                    words.members = [];
+                }
+            }
+            
+            // Charger le mode
+            const savedMode = localStorage.getItem('pipotronMode');
+            if (savedMode !== null) {
+                isPersonalMode = savedMode === 'true';
+                document.getElementById('mode-toggle').checked = isPersonalMode;
+                updateModeLabel();
+            }
+        }
+
+        // Sauvegarder les données dans le stockage local
+        function saveToLocalStorage() {
+            localStorage.setItem('pipotronWords', JSON.stringify(words));
+            localStorage.setItem('pipotronMode', isPersonalMode);
+        }
+
+        // Mettre à jour l'affichage du mode actuel
+        function updateModeLabel() {
+            const modeLabel = document.getElementById('current-mode');
+            modeLabel.textContent = isPersonalMode ? 'Mode personnalisé' : 'Mode anonyme';
+        }
+
+        // Fonction pour générer une phrase aléatoire
+        function generateSentence() {
+            // Déterminer quels sujets utiliser selon le mode
+            let subjectsToUse = [...words.subjects];
+            
+            // En mode personnalisé, inclure les membres
+            if (isPersonalMode && words.members.length > 0) {
+                subjectsToUse = [...words.subjects, ...words.members];
+            }
+            
+            // Si aucun sujet n'est disponible, utiliser un sujet par défaut
+            if (subjectsToUse.length === 0) {
+                subjectsToUse = ["L'équipe"];
+            }
+            
+            const subject = subjectsToUse[Math.floor(Math.random() * subjectsToUse.length)];
+            
+            // Si aucun verbe n'est disponible, utiliser un verbe par défaut
+            const verb = words.verbs.length > 0 
+                ? words.verbs[Math.floor(Math.random() * words.verbs.length)] 
+                : "développe";
+            
+            // Si aucun adjectif n'est disponible, utiliser un adjectif par défaut
+            const adjective = words.adjectives.length > 0 
+                ? words.adjectives[Math.floor(Math.random() * words.adjectives.length)] 
+                : "innovante";
+            
+            // Si aucun complément n'est disponible, utiliser un complément par défaut
+            const complement = words.complements.length > 0 
+                ? words.complements[Math.floor(Math.random() * words.complements.length)] 
+                : "des synergies importantes";
+            
+            return `${subject} ${verb} de manière ${adjective} ${complement}.`;
+        }
+
+        // Fonction pour afficher les mots dans chaque catégorie (dans les onglets et le panel admin)
+        function renderWords() {
+            // Render in tabs
+            document.getElementById('subjects-container-tab').innerHTML = '';
+            document.getElementById('subjects-container').innerHTML = '';
+            words.subjects.forEach(word => {
+                addWordElement('subjects', word, false, 'tab');
+                addWordElement('subjects', word);
+            });
+            
+            document.getElementById('verbs-container-tab').innerHTML = '';
+            document.getElementById('verbs-container').innerHTML = '';
+            words.verbs.forEach(word => {
+                addWordElement('verbs', word, false, 'tab');
+                addWordElement('verbs', word);
+            });
+            
+            document.getElementById('adjectives-container-tab').innerHTML = '';
+            document.getElementById('adjectives-container').innerHTML = '';
+            words.adjectives.forEach(word => {
+                addWordElement('adjectives', word, false, 'tab');
+                addWordElement('adjectives', word);
+            });
+            
+            document.getElementById('complements-container-tab').innerHTML = '';
+            document.getElementById('complements-container').innerHTML = '';
+            words.complements.forEach(word => {
+                addWordElement('complements', word, false, 'tab');
+                addWordElement('complements', word);
+            });
+            
+            document.getElementById('members-container-tab').innerHTML = '';
+            document.getElementById('members-container').innerHTML = '';
+            words.members.forEach(word => {
+                addWordElement('members', word, true, 'tab');
+                addWordElement('members', word, true);
+            });
+            
+            updateMembersCount();
+        }
+
+        // Fonction pour mettre à jour le compteur de membres
+        function updateMembersCount() {
+            document.getElementById('members-count').textContent = words.members.length;
+            document.getElementById('members-count-tab').textContent = words.members.length;
+        }
+
+        // Fonction pour créer un élément de mot
+        function addWordElement(category, word, isMember = false, suffix = '') {
+            const wordElement = document.createElement('div');
+            wordElement.className = isMember ? 'word-tag member' : 'word-tag';
+            wordElement.innerHTML = `
+                <span>${word}</span>
+                <span class="delete" data-category="${category}" data-word="${word}">×</span>
+            `;
+            
+            const targetId = suffix ? `${category}-container-${suffix}` : `${category}-container`;
+            document.getElementById(targetId).appendChild(wordElement);
+        }
+
+        // Ajouter un nouveau mot
+        function addWord(category, word, suffix = '') {
+            if (word && !words[category].includes(word)) {
+                words[category].push(word);
+                
+                if (suffix) {
+                    addWordElement(category, word, category === 'members', suffix);
+                } else {
+                    addWordElement(category, word, category === 'members');
+                    addWordElement(category, word, category === 'members', 'tab');
+                }
+                
+                saveToLocalStorage();
+                
+                if (category === 'members') {
+                    updateMembersCount();
+                }
+            }
+        }
+
+        // Supprimer un mot
+        function deleteWord(category, word) {
+            words[category] = words[category].filter(w => w !== word);
+            renderWords();
+            saveToLocalStorage();
+        }
+
+        // Afficher une notification
+        function showNotification(message) {
+            const notification = document.getElementById('notification');
+            notification.textContent = message;
+            notification.classList.add('show');
+            
+            setTimeout(() => {
+                notification.classList.remove('show');
+            }, 3000);
+        }
+
+        // Effet de frappe pour le texte généré
+        function typeText(element, text, speed = 10) {
+            if (isTyping) {
+                clearTimeout(typingTimeout);
+            }
+            
+            isTyping = true;
+            element.textContent = '';
+            let i = 0;
+            
+            function typeChar() {
+                if (i < text.length) {
+                    element.textContent += text.charAt(i);
+                    i++;
+                    typingTimeout = setTimeout(typeChar, speed);
+                } else {
+                    isTyping = false;
+                }
+            }
+            
+            typeChar();
+        }
+
+        // Exporter au format CSV
+        function exportToCSV() {
+            // Créer les en-têtes
+            const headers = ['Sujets', 'Membres', 'Verbes', 'Adjectifs', 'Compléments'];
+            
+            // Trouver la longueur maximale pour déterminer le nombre de lignes
+            const maxLength = Math.max(
+                words.subjects.length,
+                words.members.length,
+                words.verbs.length,
+                words.adjectives.length,
+                words.complements.length
+            );
+            
+            // Créer les lignes
+            let csvContent = headers.join(',') + '\n';
+            
+            for (let i = 0; i < maxLength; i++) {
+                const row = [
+                    i < words.subjects.length ? escapeCSV(words.subjects[i]) : '',
+                    i < words.members.length ? escapeCSV(words.members[i]) : '',
+                    i < words.verbs.length ? escapeCSV(words.verbs[i]) : '',
+                    i < words.adjectives.length ? escapeCSV(words.adjectives[i]) : '',
+                    i < words.complements.length ? escapeCSV(words.complements[i]) : ''
+                ];
+                
+                csvContent += row.join(',') + '\n';
+            }
+            
+            return csvContent;
+        }
+
+        // Échapper les virgules et les guillemets pour le CSV
+        function escapeCSV(text) {
+            if (!text) return '';
+            
+            // Si le texte contient des virgules, des guillemets ou des sauts de ligne, l'entourer de guillemets
+            if (text.includes(',') || text.includes('"') || text.includes('\n')) {
+                // Doubler les guillemets pour les échapper
+                text = text.replace(/"/g, '""');
+                return `"${text}"`;
+            }
+            
+            return text;
+        }
+
+        // Importer depuis CSV
+        function importFromCSV(csvText) {
+            // Séparer les lignes
+            const lines = csvText.split(/\r?\n/);
+            
+            // Vérifier si le CSV a des en-têtes
+            if (lines.length < 2) {
+                alert('Le fichier CSV est vide ou invalide.');
+                return false;
+            }
+            
+            // Extraire les en-têtes
+            const headers = parseCSVLine(lines[0]);
+            
+            // Vérifier si les en-têtes sont valides
+            const expectedHeaders = ['Sujets', 'Membres', 'Verbes', 'Adjectifs', 'Compléments'];
+            const headersValid = expectedHeaders.every(header => headers.includes(header));
+            
+            if (!headersValid) {
+                alert('Les en-têtes du CSV ne correspondent pas au format attendu. Utilisez: Sujets,Membres,Verbes,Adjectifs,Compléments');
+                return false;
+            }
+            
+            // Initialiser les nouveaux tableaux de mots
+            const newWords = {
+                subjects: [],
+                members: [],
+                verbs: [],
+                adjectives: [],
+                complements: []
+            };
+            
+            // Indice de chaque colonne
+            const indexes = {
+                subjects: headers.indexOf('Sujets'),
+                members: headers.indexOf('Membres'),
+                verbs: headers.indexOf('Verbes'),
+                adjectives: headers.indexOf('Adjectifs'),
+                complements: headers.indexOf('Compléments')
+            };
+            
+            // Traiter les lignes de données
+            for (let i = 1; i < lines.length; i++) {
+                if (!lines[i].trim()) continue; // Ignorer les lignes vides
+                
+                const values = parseCSVLine(lines[i]);
+                
+                // Ajouter chaque valeur à la catégorie correspondante
+                Object.keys(indexes).forEach(category => {
+                    const index = indexes[category];
+                    if (index >= 0 && index < values.length && values[index].trim()) {
+                        newWords[category].push(values[index].trim());
+                    }
+                });
+            }
+            
+            // Mettre à jour les mots
+            words = newWords;
+            renderWords();
+            saveToLocalStorage();
+            
+            return true;
+        }
+
+        // Analyser une ligne CSV en tenant compte des guillemets
+        function parseCSVLine(line) {
+            const result = [];
+            let insideQuotes = false;
+            let currentValue = '';
+            let i = 0;
+            
+            while (i < line.length) {
+                const char = line[i];
+                
+                if (char === '"') {
+                    if (insideQuotes && line[i + 1] === '"') {
+                        // Double guillemet à l'intérieur d'une valeur entre guillemets
+                        currentValue += '"';
+                        i++;
+                    } else {
+                        // Basculer l'état des guillemets
+                        insideQuotes = !insideQuotes;
+                    }
+                } else if (char === ',' && !insideQuotes) {
+                    // Fin de la valeur
+                    result.push(currentValue);
+                    currentValue = '';
+                } else {
+                    // Ajouter le caractère à la valeur actuelle
+                    currentValue += char;
+                }
+                
+                i++;
+            }
+            
+            // Ajouter la dernière valeur
+            result.push(currentValue);
+            
+            return result;
+        }
+
+        // Initialisation
+        document.addEventListener('DOMContentLoaded', async function() {
+            // Vérifier si c'est la première visite
+            await checkFirstVisit();
+            
+            // Charger les données depuis le stockage local
+            loadFromLocalStorage();
+            
+            // Afficher les mots
+            renderWords();
+            
+            // Générer une phrase
+            document.getElementById('generate-btn').addEventListener('click', function() {
+                const output = document.getElementById('output');
+                const sentence = generateSentence();
+                typeText(output, sentence, 10);
+            });
+            
+            // Basculer entre les modes
+            document.getElementById('mode-toggle').addEventListener('change', function() {
+                isPersonalMode = this.checked;
+                updateModeLabel();
+                saveToLocalStorage();
+            });
+            
+            // Gestion des onglets
+            document.querySelectorAll('.tab').forEach(tab => {
+                tab.addEventListener('click', function() {
+                    const tabId = this.getAttribute('data-tab');
+                    
+                    document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+                    document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
+                    
+                    this.classList.add('active');
+                    document.getElementById(tabId).classList.add('active');
+                });
+            });
+            
+            // Gérer le menu burger
+            document.getElementById('menu-icon').addEventListener('click', function() {
+                document.getElementById('admin-panel').classList.add('open');
+            });
+            
+            document.getElementById('close-admin').addEventListener('click', function() {
+                document.getElementById('admin-panel').classList.remove('open');
+            });
+            
+            // Fonctions d'ajout de mots (panel admin et onglets)
+            function setupAddWordButton(btnId, inputId, category, suffix = '') {
+                document.getElementById(btnId).addEventListener('click', function() {
+                    const input = document.getElementById(inputId);
+                    addWord(category, input.value.trim(), suffix);
+                    input.value = '';
+                });
+            }
+            
+            // Setup pour le panel admin
+            setupAddWordButton('add-subject-btn', 'new-subject', 'subjects');
+            setupAddWordButton('add-verb-btn', 'new-verb', 'verbs');
+            setupAddWordButton('add-adjective-btn', 'new-adjective', 'adjectives');
+            setupAddWordButton('add-complement-btn', 'new-complement', 'complements');
+            setupAddWordButton('add-member-btn', 'new-member', 'members');
+            
+            // Setup pour les onglets
+            setupAddWordButton('add-subject-btn-tab', 'new-subject-tab', 'subjects', 'tab');
+            setupAddWordButton('add-verb-btn-tab', 'new-verb-tab', 'verbs', 'tab');
+            setupAddWordButton('add-adjective-btn-tab', 'new-adjective-tab', 'adjectives', 'tab');
+            setupAddWordButton('add-complement-btn-tab', 'new-complement-tab', 'complements', 'tab');
+            setupAddWordButton('add-member-btn-tab', 'new-member-tab', 'members', 'tab');
+            
+            // Fonctions d'export CSV (panel admin et onglets)
+            function setupExportCSV(btnId, previewId, containerId, copyBtnId) {
+                document.getElementById(btnId).addEventListener('click', function() {
+                    const csvContent = exportToCSV();
+                    document.getElementById(previewId).value = csvContent;
+                    document.getElementById(containerId).classList.remove('hidden');
+                    
+                    // Créer et déclencher le téléchargement
+                    const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
+                    const url = URL.createObjectURL(blob);
+                    const link = document.createElement('a');
+                    link.setAttribute('href', url);
+                    link.setAttribute('download', 'pipotron-mots.csv');
+                    link.style.visibility = 'hidden';
+                    document.body.appendChild(link);
+                    link.click();
+                    document.body.removeChild(link);
+                });
+                
+                document.getElementById(copyBtnId).addEventListener('click', function() {
+                    const csvText = document.getElementById(previewId);
+                    csvText.select();
+                    document.execCommand('copy');
+                    this.textContent = 'Copié !';
+                    setTimeout(() => {
+                        this.textContent = 'Copier le CSV';
+                    }, 2000);
+                });
+            }
+            
+            // Setup pour le panel admin
+            setupExportCSV('export-csv-btn', 'csv-preview', 'csv-preview-container', 'copy-csv-btn');
+            
+            // Setup pour les onglets
+            setupExportCSV('export-csv-btn-tab', 'csv-preview-tab', 'csv-preview-container-tab', 'copy-csv-btn-tab');
+            
+            // Fonctions d'import CSV (panel admin et onglets)
+            function setupImportCSV(uploadBtnId, fileInputId, importBtnId, previewId, previewContainerId) {
+                document.getElementById(uploadBtnId).addEventListener('click', function() {
+                    document.getElementById(fileInputId).click();
+                });
+                
+                document.getElementById(fileInputId).addEventListener('change', function(e) {
+                    const file = e.target.files[0];
+                    if (!file) return;
+                    
+                    const reader = new FileReader();
+                    reader.onload = function(event) {
+                        csvFileData = event.target.result;
+                        document.getElementById(previewId).value = csvFileData;
+                        document.getElementById(previewContainerId).classList.remove('hidden');
+                        document.getElementById(importBtnId).disabled = false;
+                    };
+                    reader.readAsText(file);
+                });
+                
+                document.getElementById(importBtnId).addEventListener('click', function() {
+                    if (csvFileData) {
+                        if (importFromCSV(csvFileData)) {
+                            showNotification('Importation réussie !');
+                            document.getElementById(previewContainerId).classList.add('hidden');
+                            document.getElementById(importBtnId).disabled = true;
+                            document.getElementById(fileInputId).value = '';
+                            csvFileData = null;
+                        }
+                    } else {
+                        alert('Veuillez d\'abord sélectionner un fichier CSV.');
+                    }
+                });
+            }
+            
+            // Setup pour le panel admin
+            setupImportCSV('upload-csv-btn', 'csv-file-input', 'import-csv-btn', 'import-preview', 'import-preview-container');
+            
+            // Setup pour les onglets
+            setupImportCSV('upload-csv-btn-tab', 'csv-file-input-tab', 'import-csv-btn-tab', 'import-preview-tab', 'import-preview-container-tab');
+            
+            // Gérer la suppression des mots
+            document.addEventListener('click', function(e) {
+                if (e.target.classList.contains('delete')) {
+                    const category = e.target.getAttribute('data-category');
+                    const word = e.target.getAttribute('data-word');
+                    deleteWord(category, word);
+                }
+            });
+
+            // Permettre l'ajout avec la touche Entrée
+            function setupEnterKeyPress(inputId, btnId) {
+                document.getElementById(inputId).addEventListener('keypress', function(e) {
+                    if (e.key === 'Enter') {
+                        document.getElementById(btnId).click();
+                    }
+                });
+            }
+
+            // Setup pour le panel admin
+            setupEnterKeyPress('new-subject', 'add-subject-btn');
+            setupEnterKeyPress('new-verb', 'add-verb-btn');
+            setupEnterKeyPress('new-adjective', 'add-adjective-btn');
+            setupEnterKeyPress('new-complement', 'add-complement-btn');
+            setupEnterKeyPress('new-member', 'add-member-btn');
+            
+            // Setup pour les onglets
+            setupEnterKeyPress('new-subject-tab', 'add-subject-btn-tab');
+            setupEnterKeyPress('new-verb-tab', 'add-verb-btn-tab');
+            setupEnterKeyPress('new-adjective-tab', 'add-adjective-btn-tab');
+            setupEnterKeyPress('new-complement-tab', 'add-complement-btn-tab');
+            setupEnterKeyPress('new-member-tab', 'add-member-btn-tab');
+            
+            // Générer une phrase initiale
+            document.getElementById('generate-btn').click();
+        });
+    </script>
+</body>
+</html>
